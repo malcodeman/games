@@ -1,33 +1,48 @@
 "use client";
 import { useState } from "react";
-import { map, set, values } from "remeda";
-import { Squares } from "./types";
+import { map, set, values, isIncludedIn } from "remeda";
+import { cn } from "@/utils";
+import { State } from "./types";
 
-const SQUARES_INITIAL_STATE: Squares = Array(9).fill(null);
+const INITIAL_STATE: State = {
+  squares: Array(9).fill(null),
+  isXTurn: true,
+  winner: null,
+  winningSquares: null,
+};
 
 export default function TicTacToePage() {
-  const [squares, setSquares] = useState(SQUARES_INITIAL_STATE);
-  const [isXTurn, setIsXTurn] = useState(true);
-  const [winner, setWinner] = useState<null | string>(null);
+  const [state, setState] = useState<State>(INITIAL_STATE);
 
-  function updateSquares(squares: Squares, index: number, value: string) {
+  function updateSquares(
+    squares: typeof state.squares,
+    index: number,
+    value: string,
+  ) {
     return values(set(squares, index, value));
   }
 
   function handleOnClick(index: number) {
-    if (squares[index] || winner) {
+    if (state.squares[index] || state.winner) {
       return;
     }
 
-    const nextSquares = updateSquares(squares, index, isXTurn ? "X" : "O");
-    const nextWinner = calculateWinner(nextSquares);
+    const nextSquares = updateSquares(
+      state.squares,
+      index,
+      state.isXTurn ? "X" : "O",
+    );
+    const winningSquares = calculateWinningSquares(nextSquares);
 
-    setSquares(nextSquares);
-    setIsXTurn(!isXTurn);
-    setWinner(nextWinner);
+    setState({
+      squares: nextSquares,
+      isXTurn: !state.isXTurn,
+      winner: winningSquares ? nextSquares[index] : null,
+      winningSquares,
+    });
   }
 
-  function calculateWinner(squares: Squares) {
+  function calculateWinningSquares(squares: typeof state.squares) {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -45,7 +60,7 @@ export default function TicTacToePage() {
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        return squares[a];
+        return [a, b, c];
       }
     }
 
@@ -53,20 +68,26 @@ export default function TicTacToePage() {
   }
 
   function restartGame() {
-    setSquares(SQUARES_INITIAL_STATE);
-    setIsXTurn(true);
-    setWinner(null);
+    setState(INITIAL_STATE);
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#221f22] text-[#fcfcfa]">
       <div>
         <div className="mb-2 grid grid-cols-3 gap-1">
-          {map(squares, (item, index) => (
+          {map(state.squares, (item, index) => (
             <div
               key={index}
               role="button"
-              className="flex h-16 w-16 cursor-pointer items-center justify-center bg-[#2d2a2e] p-3 text-6xl sm:h-20 sm:w-20 md:h-24 md:w-24"
+              className={cn(
+                "flex h-16 w-16 cursor-pointer items-center justify-center bg-[#2d2a2e] p-3 text-6xl transition-all sm:h-20 sm:w-20 md:h-24 md:w-24",
+                {
+                  "bg-[#ffd866] text-[#2d2a2e]": isIncludedIn(
+                    index,
+                    state.winningSquares ?? [],
+                  ),
+                },
+              )}
               onClick={() => handleOnClick(index)}
             >
               {item}
