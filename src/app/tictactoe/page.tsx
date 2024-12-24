@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { map, set, values, isIncludedIn } from "remeda";
-import { cn } from "@/utils";
 import { State } from "./types";
+import { Square } from "./components/Square";
 
 const INITIAL_STATE: State = {
   squares: Array(9).fill(null),
@@ -76,22 +76,13 @@ export default function TicTacToePage() {
       <div>
         <div className="mb-2 grid grid-cols-3 gap-1">
           {map(state.squares, (item, index) => (
-            <div
+            <Square
               key={index}
-              role="button"
-              className={cn(
-                "flex h-16 w-16 cursor-pointer items-center justify-center bg-[#2d2a2e] p-3 text-6xl transition-all sm:h-20 sm:w-20 md:h-24 md:w-24",
-                {
-                  "bg-[#ffd866] text-[#2d2a2e]": isIncludedIn(
-                    index,
-                    state.winningSquares ?? [],
-                  ),
-                },
-              )}
-              onClick={() => handleOnClick(index)}
-            >
-              {item}
-            </div>
+              mark={item}
+              index={index}
+              isWinningSquare={isIncludedIn(index, state.winningSquares ?? [])}
+              onClick={handleOnClick}
+            />
           ))}
         </div>
         <button onClick={restartGame}>Restart game</button>
