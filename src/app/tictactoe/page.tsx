@@ -2,9 +2,11 @@
 import { useState } from "react";
 import { map, set, values, isIncludedIn } from "remeda";
 import { LuRotateCcw } from "react-icons/lu";
-import { State } from "./types";
+import { createListCollection } from "@ark-ui/react";
+import { SelectItem, State } from "./types";
 import { Square } from "./components/square";
 import { Button } from "./ui/button";
+import { Select } from "./ui/select";
 
 const INITIAL_STATE: State = {
   squares: Array(9).fill(null),
@@ -12,10 +14,21 @@ const INITIAL_STATE: State = {
   winner: null,
   winningSquares: null,
 };
+const DIFFICULTY_COLLECTION = createListCollection({
+  items: [
+    { label: "Easy", value: "easy", disabled: true },
+    { label: "Medium", value: "medium", disabled: true },
+    { label: "Hard", value: "hard", disabled: true },
+    { label: "Play against a friend", value: "friend", disabled: false },
+  ],
+});
 
 export default function TicTacToePage() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const isRestartDisabled = state.squares.every((item) => item === null);
+  const [difficulty, setDifficulty] = useState<SelectItem[]>([
+    { label: "Play against a friend", value: "friend", disabled: false },
+  ]);
 
   function updateSquares(
     squares: typeof state.squares,
@@ -77,6 +90,13 @@ export default function TicTacToePage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#221f22] text-[#fcfcfa]">
       <div>
+        <Select
+          label="Difficulty"
+          className="mb-2"
+          value={[difficulty[0].value]}
+          collection={DIFFICULTY_COLLECTION}
+          onValueChange={(details) => setDifficulty(details.items)}
+        />
         <div className="mb-2 grid grid-cols-3 gap-1">
           {map(state.squares, (item, index) => (
             <Square

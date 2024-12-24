@@ -4,3 +4,9 @@ export type State = {
   winner: null | string;
   winningSquares: null | number[];
 };
+
+export type SelectItem = {
+  label: string;
+  value: string;
+  disabled: boolean;
+};
