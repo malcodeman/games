@@ -14,7 +14,7 @@ export function Square(props: Props) {
     <div
       role="button"
       className={cn(
-        "flex h-16 w-16 cursor-pointer items-center justify-center bg-[#2d2a2e] p-3 text-6xl transition-all sm:h-20 sm:w-20 md:h-24 md:w-24",
+        "flex size-16 cursor-pointer items-center justify-center bg-[#2d2a2e] p-3 text-4xl font-semibold transition-all sm:size-20 sm:text-5xl md:size-24 md:text-6xl lg:size-32 lg:text-7xl",
         {
           "bg-[#ffd866] text-[#2d2a2e]": isWinningSquare,
         },
