@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
 import { map, set, values, isIncludedIn } from "remeda";
+import { LuRotateCcw } from "react-icons/lu";
 import { State } from "./types";
-import { Square } from "./components/Square";
+import { Square } from "./components/square";
+import { Button } from "./ui/button";
 
 const INITIAL_STATE: State = {
   squares: Array(9).fill(null),
@@ -13,6 +15,7 @@ const INITIAL_STATE: State = {
 
 export default function TicTacToePage() {
   const [state, setState] = useState<State>(INITIAL_STATE);
+  const isRestartDisabled = state.squares.every((item) => item === null);
 
   function updateSquares(
     squares: typeof state.squares,
@@ -85,7 +88,11 @@ export default function TicTacToePage() {
             />
           ))}
         </div>
-        <button onClick={restartGame}>Restart game</button>
+        <div className="flex justify-center">
+          <Button onClick={restartGame} disabled={isRestartDisabled}>
+            Restart game <LuRotateCcw />
+          </Button>
+        </div>
       </div>
     </div>
   );
