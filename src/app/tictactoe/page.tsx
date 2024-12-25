@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { map, isIncludedIn } from "remeda";
+import { map, isIncludedIn, shuffle, filter, length } from "remeda";
 import { LuRotateCcw } from "react-icons/lu";
-import { createListCollection } from "@ark-ui/react";
+import { createListCollection, SelectValueChangeDetails } from "@ark-ui/react";
 import { SelectItem, State } from "./types";
 import { Square } from "./components/square";
 import { Button } from "./ui/button";
@@ -16,7 +16,7 @@ const INITIAL_STATE: State = {
 };
 const DIFFICULTY_COLLECTION = createListCollection({
   items: [
-    { label: "Easy", value: "easy", disabled: true },
+    { label: "Easy", value: "easy", disabled: false },
     { label: "Medium", value: "medium", disabled: true },
     { label: "Hard", value: "hard", disabled: true },
     { label: "Play against a friend", value: "friend", disabled: false },
@@ -27,17 +27,71 @@ export default function TicTacToePage() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const isRestartDisabled = state.squares.every((item) => item === null);
   const [difficulty, setDifficulty] = useState<SelectItem[]>([
-    { label: "Play against a friend", value: "friend", disabled: false },
+    { label: "Easy", value: "easy", disabled: false },
   ]);
+
+  function calculateAiMove(squares: typeof state.squares, xTurnIndex: number) {
+    const nextSquares = map(squares, (item, i) => {
+      return {
+        index: i,
+        value: item,
+      };
+    });
+    const filteredSquares = filter(
+      nextSquares,
+      (item) => item.value === null && item.index !== xTurnIndex,
+    );
+
+    if (length(filteredSquares) === 0) {
+      return null;
+    }
+
+    return shuffle(filteredSquares)[0].index;
+  }
+
+  function handleAiMove(index: number) {
+    const aiMove = calculateAiMove(state.squares, index);
+    const nextSquares = map(state.squares, (item, i) =>
+      i === index ? "X" : item,
+    );
+    const winningSquares = calculateWinningSquares(nextSquares);
+
+    if (winningSquares || aiMove === null) {
+      return nextSquares;
+    }
+
+    const nextAiSquares = map(nextSquares, (item, i) =>
+      i === aiMove ? "O" : item,
+    );
+
+    return nextAiSquares;
+  }
+
+  function handlePlayerMove(index: number) {
+    const nextSquares = map(state.squares, (item, i) =>
+      i === index ? (state.isXTurn ? "X" : "O") : item,
+    );
+
+    return nextSquares;
+  }
 
   function handleOnClick(index: number) {
     if (state.squares[index] || state.winner) {
       return;
     }
+    if (difficulty[0].value !== "friend") {
+      const nextSquares = handleAiMove(index);
+      const winningSquares = calculateWinningSquares(nextSquares);
 
-    const nextSquares = map(state.squares, (item, i) =>
-      i === index ? (state.isXTurn ? "X" : "O") : item,
-    );
+      setState({
+        squares: nextSquares,
+        isXTurn: !state.isXTurn,
+        winner: winningSquares ? nextSquares[index] : null,
+        winningSquares,
+      });
+      return;
+    }
+    const nextSquares = handlePlayerMove(index);
     const winningSquares = calculateWinningSquares(nextSquares);
 
     setState({
@@ -77,6 +131,11 @@ export default function TicTacToePage() {
     setState(INITIAL_STATE);
   }
 
+  function onDifficultyChange(details: SelectValueChangeDetails<SelectItem>) {
+    setDifficulty(details.items);
+    restartGame();
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#221f22] text-[#fcfcfa]">
       <div>
@@ -85,7 +144,7 @@ export default function TicTacToePage() {
           className="mb-2"
           value={[difficulty[0].value]}
           collection={DIFFICULTY_COLLECTION}
-          onValueChange={(details) => setDifficulty(details.items)}
+          onValueChange={onDifficultyChange}
         />
         <div className="mb-2 grid grid-cols-3 gap-1">
           {map(state.squares, (item, index) => (
