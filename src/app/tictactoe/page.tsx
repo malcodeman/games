@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { map, set, values, isIncludedIn } from "remeda";
+import { map, isIncludedIn } from "remeda";
 import { LuRotateCcw } from "react-icons/lu";
 import { createListCollection } from "@ark-ui/react";
 import { SelectItem, State } from "./types";
@@ -30,23 +30,13 @@ export default function TicTacToePage() {
     { label: "Play against a friend", value: "friend", disabled: false },
   ]);
 
-  function updateSquares(
-    squares: typeof state.squares,
-    index: number,
-    value: string,
-  ) {
-    return values(set(squares, index, value));
-  }
-
   function handleOnClick(index: number) {
     if (state.squares[index] || state.winner) {
       return;
     }
 
-    const nextSquares = updateSquares(
-      state.squares,
-      index,
-      state.isXTurn ? "X" : "O",
+    const nextSquares = map(state.squares, (item, i) =>
+      i === index ? (state.isXTurn ? "X" : "O") : item,
     );
     const winningSquares = calculateWinningSquares(nextSquares);
 
