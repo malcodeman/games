@@ -11,7 +11,6 @@ import { Select } from "./ui/select";
 const INITIAL_STATE: State = {
   squares: Array(9).fill(null),
   isXTurn: true,
-  winner: null,
   winningSquares: null,
 };
 const DIFFICULTY_COLLECTION = createListCollection({
@@ -76,7 +75,7 @@ export default function TicTacToePage() {
   }
 
   function handleOnClick(index: number) {
-    if (state.squares[index] || state.winner) {
+    if (state.squares[index] || state.winningSquares) {
       return;
     }
     if (difficulty[0].value !== "friend") {
@@ -86,7 +85,6 @@ export default function TicTacToePage() {
       setState({
         squares: nextSquares,
         isXTurn: !state.isXTurn,
-        winner: winningSquares ? nextSquares[index] : null,
         winningSquares,
       });
       return;
@@ -97,7 +95,6 @@ export default function TicTacToePage() {
     setState({
       squares: nextSquares,
       isXTurn: !state.isXTurn,
-      winner: winningSquares ? nextSquares[index] : null,
       winningSquares,
     });
   }
