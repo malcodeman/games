@@ -4,11 +4,12 @@ type Props = {
   mark: string | null;
   index: number;
   isWinningSquare: boolean;
+  disabled: boolean;
   onClick: (index: number) => void;
 };
 
 export function Square(props: Props) {
-  const { mark, index, isWinningSquare, onClick } = props;
+  const { mark, index, isWinningSquare, disabled, onClick } = props;
 
   return (
     <div
@@ -17,8 +18,10 @@ export function Square(props: Props) {
         "flex size-16 cursor-pointer items-center justify-center bg-[#2d2a2e] p-3 text-4xl font-semibold transition-all sm:size-20 sm:text-5xl md:size-24 md:text-6xl lg:size-32 lg:text-7xl",
         {
           "bg-[#ffd866] text-[#2d2a2e]": isWinningSquare,
+          "cursor-not-allowed": disabled,
         },
       )}
+      aria-disabled={disabled}
       onClick={() => onClick(index)}
     >
       {mark}

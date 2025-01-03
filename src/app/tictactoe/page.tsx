@@ -144,12 +144,13 @@ export default function TicTacToePage() {
           onValueChange={onDifficultyChange}
         />
         <div className="mb-2 grid grid-cols-3 gap-1">
-          {map(state.squares, (item, index) => (
+          {map(state.squares, (mark, index) => (
             <Square
               key={index}
-              mark={item}
+              mark={mark}
               index={index}
               isWinningSquare={isIncludedIn(index, state.winningSquares ?? [])}
+              disabled={Boolean(state.winningSquares)}
               onClick={handleOnClick}
             />
           ))}
