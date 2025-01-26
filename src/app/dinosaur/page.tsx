@@ -1,51 +1,40 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { Stage, Sprite, Graphics } from "@pixi/react";
 import { Graphics as GraphicsType } from "pixi.js";
+import { useKeyboardEvent } from "@react-hookz/web";
+import { gameReducer, gameReducerinitialState } from "./reducers";
 
-const ground = (g: GraphicsType) => {
+const drawGround = (g: GraphicsType) => {
   g.clear();
   g.lineStyle(1, "#ccc");
-  g.moveTo(0, 550); // Start position
-  g.lineTo(800, 550); // End position
+  g.moveTo(0, 550);
+  g.lineTo(800, 550);
 };
 
 export default function DinosaurPage() {
-  const [obstacles, setObstacles] = useState([
-    { x: 800, y: 500, width: 50, height: 50 },
-  ]);
-  const gameRef = useRef<number | null>(null);
+  const [state, dispatch] = useReducer(gameReducer, gameReducerinitialState);
 
+  // 🎮 Game Loop
   useEffect(() => {
     function gameLoop() {
-      setObstacles((prev) => {
-        const newObstacles = prev
-          .map((obs) => ({ ...obs, x: obs.x - 5 }))
-          .filter((obs) => obs.x > -50);
-
-        if (Math.random() < 0.02)
-          newObstacles.push({ x: 800, y: 500, width: 50, height: 50 });
-
-        return newObstacles;
-      });
-
-      gameRef.current = requestAnimationFrame(gameLoop);
+      dispatch({ type: "TICK" });
+      requestAnimationFrame(gameLoop);
     }
 
-    gameRef.current = requestAnimationFrame(gameLoop);
-    return () => {
-      if (gameRef.current !== null) {
-        cancelAnimationFrame(gameRef.current);
-      }
-    };
+    const animationFrame = requestAnimationFrame(gameLoop);
+
+    return () => cancelAnimationFrame(animationFrame);
   }, []);
+
+  useKeyboardEvent(" ", () => dispatch({ type: "JUMP" }), []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#221f22] text-[#fcfcfa]">
       <Stage width={800} height={600} options={{ backgroundColor: "#000" }}>
-        <Graphics draw={ground} />
-        <Sprite image="./sprites/ghost.png" x={100} y={500} />
-        {obstacles.map((obs, index) => (
+        <Graphics draw={drawGround} />
+        <Sprite image="./sprites/ghost.png" x={100} y={state.y} />
+        {state.obstacles.map((obs, index) => (
           <Graphics
             key={index}
             draw={(g) => {
