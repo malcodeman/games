@@ -51,7 +51,9 @@ export default function DinosaurPage() {
   useKeyboardEvent(
     " ",
     () => {
-      if (!state.isGameOver) {
+      if (state.isGameOver) {
+        dispatch({ type: "RESTART_GAME" });
+      } else {
         dispatch({ type: "JUMP" });
       }
     },

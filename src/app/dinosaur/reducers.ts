@@ -83,6 +83,9 @@ export const gameReducer = (state: GameState, action: GameAction) => {
     case "INCREMENT_SCORE":
       return { ...state, score: state.score + 1 };
 
+    case "RESTART_GAME":
+      return { ...state, ...gameReducerinitialState };
+
     default:
       return state;
   }

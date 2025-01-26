@@ -17,4 +17,5 @@ export type GameState = {
 export type GameAction =
   | { type: "TICK" }
   | { type: "JUMP" }
-  | { type: "INCREMENT_SCORE" };
+  | { type: "INCREMENT_SCORE" }
+  | { type: "RESTART_GAME" };
