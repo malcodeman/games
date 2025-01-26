@@ -48,17 +48,15 @@ export default function DinosaurPage() {
     !state.isGameOver ? 200 : undefined,
   );
 
-  useKeyboardEvent(
-    " ",
-    () => {
-      if (state.isGameOver) {
-        dispatch({ type: "RESTART_GAME" });
-      } else {
-        dispatch({ type: "JUMP" });
-      }
-    },
-    [state.isGameOver],
-  );
+  function handleOnJump() {
+    if (state.isGameOver) {
+      dispatch({ type: "RESTART_GAME" });
+    } else {
+      dispatch({ type: "JUMP" });
+    }
+  }
+
+  useKeyboardEvent(" ", () => handleOnJump(), [state.isGameOver]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#221f22] text-[#fcfcfa]">
@@ -66,6 +64,7 @@ export default function DinosaurPage() {
         width={RENDERER_SIZE.width}
         height={RENDERER_SIZE.height}
         options={{ backgroundColor: "#000" }}
+        onClick={() => handleOnJump()}
       >
         <Text
           text={`Score: ${state.score}`}
@@ -98,6 +97,21 @@ export default function DinosaurPage() {
             }}
           />
         ))}
+        {state.isGameOver ? (
+          <Text
+            text="Game Over"
+            x={RENDERER_SIZE.width / 2}
+            y={RENDERER_SIZE.height / 2}
+            style={
+              new TextStyle({
+                fontSize: 48,
+                fontWeight: "bold",
+                fill: "#ff0000",
+              })
+            }
+            anchor={0.5}
+          />
+        ) : null}
       </Stage>
     </div>
   );
