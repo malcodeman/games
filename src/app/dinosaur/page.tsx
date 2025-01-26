@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useReducer, useRef } from "react";
-import { Stage, Sprite, Graphics } from "@pixi/react";
-import { Graphics as GraphicsType } from "pixi.js";
-import { useKeyboardEvent } from "@react-hookz/web";
+import { Stage, Sprite, Graphics, Text } from "@pixi/react";
+import { Graphics as GraphicsType, TextStyle } from "pixi.js";
+import { useIntervalEffect, useKeyboardEvent } from "@react-hookz/web";
 import { gameReducer, gameReducerinitialState } from "./reducers";
 import {
   GROUND_Y,
@@ -41,6 +41,13 @@ export default function DinosaurPage() {
     };
   }, [state.isGameOver]);
 
+  useIntervalEffect(
+    () => {
+      dispatch({ type: "INCREMENT_SCORE" });
+    },
+    !state.isGameOver ? 200 : undefined,
+  );
+
   useKeyboardEvent(
     " ",
     () => {
@@ -58,6 +65,18 @@ export default function DinosaurPage() {
         height={RENDERER_SIZE.height}
         options={{ backgroundColor: "#000" }}
       >
+        <Text
+          text={`Score: ${state.score}`}
+          x={20}
+          y={20}
+          style={
+            new TextStyle({
+              fontSize: 24,
+              fontWeight: "400",
+              fill: "#fff",
+            })
+          }
+        />
         <Graphics draw={drawGround} />
         <Sprite
           image="./sprites/ghost.png"

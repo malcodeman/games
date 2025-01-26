@@ -29,6 +29,7 @@ export const gameReducerinitialState: GameState = {
   isJumping: false,
   obstacles: [],
   isGameOver: false,
+  score: 0,
 };
 
 export const gameReducer = (state: GameState, action: GameAction) => {
@@ -67,6 +68,9 @@ export const gameReducer = (state: GameState, action: GameAction) => {
       return state.isJumping
         ? state
         : { ...state, velocity: JUMP_STRENGTH, isJumping: true };
+
+    case "INCREMENT_SCORE":
+      return { ...state, score: state.score + 1 };
 
     default:
       return state;

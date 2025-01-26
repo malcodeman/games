@@ -11,6 +11,10 @@ export type GameState = {
   isJumping: boolean;
   obstacles: Obstacle[];
   isGameOver: boolean;
+  score: number;
 };
 
-export type GameAction = { type: "TICK" } | { type: "JUMP" };
+export type GameAction =
+  | { type: "TICK" }
+  | { type: "JUMP" }
+  | { type: "INCREMENT_SCORE" };
