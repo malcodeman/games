@@ -29,11 +29,14 @@ export const gameReducerinitialState: GameState = {
   velocity: 0,
   isJumping: false,
   obstacles: [],
-  isGameOver: false,
   score: 0,
+  gameState: "idle",
 };
 
-export const gameReducer = (state: GameState, action: GameAction) => {
+export const gameReducer = (
+  state: GameState,
+  action: GameAction,
+): GameState => {
   switch (action.type) {
     case "TICK": {
       const newY = Math.min(state.y + state.velocity, FLOOR);
@@ -60,7 +63,7 @@ export const gameReducer = (state: GameState, action: GameAction) => {
 
       if (isColliding(newY, obstacles)) {
         hurtSound.play();
-        return { ...state, isGameOver: true };
+        return { ...state, gameState: "over" };
       }
 
       return {
@@ -84,7 +87,7 @@ export const gameReducer = (state: GameState, action: GameAction) => {
       return { ...state, score: state.score + 1 };
 
     case "RESTART_GAME":
-      return { ...state, ...gameReducerinitialState };
+      return { ...state, ...gameReducerinitialState, gameState: "playing" };
 
     default:
       return state;

@@ -26,7 +26,7 @@ export default function DinosaurPage() {
   // 🎮 Game Loop
   useEffect(() => {
     function gameLoop() {
-      if (!state.isGameOver) {
+      if (state.gameState === "playing") {
         dispatch({ type: "TICK" });
         gameLoopRef.current = requestAnimationFrame(gameLoop);
       }
@@ -39,24 +39,24 @@ export default function DinosaurPage() {
         cancelAnimationFrame(gameLoopRef.current);
       }
     };
-  }, [state.isGameOver]);
+  }, [state.gameState]);
 
   useIntervalEffect(
     () => {
       dispatch({ type: "INCREMENT_SCORE" });
     },
-    !state.isGameOver ? 200 : undefined,
+    state.gameState === "playing" ? 200 : undefined,
   );
 
   function handleOnJump() {
-    if (state.isGameOver) {
-      dispatch({ type: "RESTART_GAME" });
-    } else {
+    if (state.gameState === "playing") {
       dispatch({ type: "JUMP" });
+    } else {
+      dispatch({ type: "RESTART_GAME" });
     }
   }
 
-  useKeyboardEvent(" ", () => handleOnJump(), [state.isGameOver]);
+  useKeyboardEvent(" ", () => handleOnJump(), [state.gameState]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#221f22] text-[#fcfcfa]">
@@ -97,7 +97,7 @@ export default function DinosaurPage() {
             }}
           />
         ))}
-        {state.isGameOver ? (
+        {state.gameState === "over" ? (
           <Text
             text="Game Over"
             x={RENDERER_SIZE.width / 2}

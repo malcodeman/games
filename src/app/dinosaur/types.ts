@@ -10,8 +10,8 @@ export type GameState = {
   velocity: number;
   isJumping: boolean;
   obstacles: Obstacle[];
-  isGameOver: boolean;
   score: number;
+  gameState: "idle" | "playing" | "over";
 };
 
 export type GameAction =
