@@ -1,4 +1,6 @@
 import {
+  ENEMY_HEIGHT,
+  ENEMY_WIDTH,
   FLOOR,
   GRAVITY,
   GROUND_Y,
@@ -12,10 +14,10 @@ import {
   RENDERER_SIZE,
 } from "./constants";
 import { coinSound, hurtSound, jumpSound } from "./sounds";
-import { GameState, GameAction, Obstacle } from "./types";
+import { GameState, GameAction, Enemy } from "./types";
 
-function isColliding(playerY: number, obstacles: Obstacle[]) {
-  return obstacles.some(
+function isColliding(playerY: number, enemies: Enemy[]) {
+  return enemies.some(
     (obs) =>
       PLAYER_X < obs.x + obs.width &&
       PLAYER_X + PLAYER_WIDTH > obs.x &&
@@ -28,7 +30,7 @@ export const gameReducerinitialState: GameState = {
   playerY: FLOOR,
   velocity: 0,
   isJumping: false,
-  obstacles: [],
+  enemies: [],
   score: 0,
   gameState: "idle",
 };
@@ -42,17 +44,22 @@ export const gameReducer = (
       const newPlayerY = Math.min(state.playerY + state.velocity, FLOOR);
       const newVelocity = newPlayerY === FLOOR ? 0 : state.velocity + GRAVITY;
       const isJumping = newPlayerY !== FLOOR;
-      const obstacles = state.obstacles
+      const enemies = state.enemies
         .map((obs) => ({ ...obs, x: obs.x - OBSTACLE_SPEED }))
         .filter((obs) => obs.x > -50);
 
       if (
         Math.random() < OBSTACLE_SPAWN_PROBABILITY &&
-        (obstacles.length === 0 ||
-          obstacles[obstacles.length - 1].x <
+        (enemies.length === 0 ||
+          enemies[enemies.length - 1].x <
             RENDERER_SIZE.width - OBSTACLE_MIN_GAP)
       ) {
-        obstacles.push({ x: 800, y: GROUND_Y - 50, width: 50, height: 50 });
+        enemies.push({
+          x: 800,
+          y: GROUND_Y - ENEMY_HEIGHT,
+          width: ENEMY_WIDTH,
+          height: ENEMY_HEIGHT,
+        });
       }
 
       if (state.score % 20 === 0 && state.score > 0) {
@@ -61,7 +68,7 @@ export const gameReducer = (
         }
       }
 
-      if (isColliding(newPlayerY, obstacles)) {
+      if (isColliding(newPlayerY, enemies)) {
         hurtSound.play();
         return { ...state, gameState: "over" };
       }
@@ -70,7 +77,7 @@ export const gameReducer = (
         ...state,
         playerY: newPlayerY,
         velocity: newVelocity,
-        obstacles,
+        enemies,
         isJumping,
       };
     }

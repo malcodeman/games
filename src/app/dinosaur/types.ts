@@ -1,4 +1,4 @@
-export type Obstacle = {
+export type Enemy = {
   x: number;
   y: number;
   width: number;
@@ -9,7 +9,7 @@ export type GameState = {
   playerY: number;
   velocity: number;
   isJumping: boolean;
-  obstacles: Obstacle[];
+  enemies: Enemy[];
   score: number;
   gameState: "idle" | "playing" | "over";
 };

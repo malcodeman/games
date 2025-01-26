@@ -6,6 +6,7 @@ import { useIntervalEffect, useKeyboardEvent } from "@react-hookz/web";
 import { gameReducer, gameReducerinitialState } from "./reducers";
 import { GROUND_Y, RENDERER_SIZE } from "./constants";
 import { Player } from "./components/Player";
+import { SlimePurple } from "./components/SlimePurple";
 
 const drawGround = (g: GraphicsType) => {
   g.clear();
@@ -75,15 +76,13 @@ export default function DinosaurPage() {
         />
         <Graphics draw={drawGround} />
         <Player y={state.playerY} gameState={state.gameState} />
-        {state.obstacles.map((obs, index) => (
-          <Graphics
+        {state.enemies.map((obs, index) => (
+          <SlimePurple
             key={index}
-            draw={(g) => {
-              g.clear();
-              g.beginFill(0xff0000);
-              g.drawRect(obs.x, obs.y, obs.width, obs.height);
-              g.endFill();
-            }}
+            x={obs.x}
+            y={obs.y}
+            width={obs.width}
+            height={obs.height}
           />
         ))}
         {state.gameState === "idle" ? (
