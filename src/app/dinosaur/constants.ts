@@ -1,7 +1,11 @@
-export const GROUND_Y = 500;
+export const GROUND_Y = 532;
 export const GRAVITY = 0.6;
 export const JUMP_STRENGTH = -12;
 export const FLOOR = 500;
 export const OBSTACLE_SPEED = 5;
 export const OBSTACLE_SPAWN_PROBABILITY = 0.01;
 export const OBSTACLE_MIN_GAP = 160;
+export const PLAYER_X = 100;
+export const PLAYER_WIDTH = 32;
+export const PLAYER_HEIGHT = 32;
+export const RENDERER_SIZE = { width: 800, height: 600 };

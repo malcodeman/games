@@ -1,39 +1,71 @@
 "use client";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { Stage, Sprite, Graphics } from "@pixi/react";
 import { Graphics as GraphicsType } from "pixi.js";
 import { useKeyboardEvent } from "@react-hookz/web";
 import { gameReducer, gameReducerinitialState } from "./reducers";
+import {
+  GROUND_Y,
+  PLAYER_HEIGHT,
+  PLAYER_WIDTH,
+  PLAYER_X,
+  RENDERER_SIZE,
+} from "./constants";
 
 const drawGround = (g: GraphicsType) => {
   g.clear();
   g.lineStyle(1, "#ccc");
-  g.moveTo(0, 550);
-  g.lineTo(800, 550);
+  g.moveTo(0, GROUND_Y);
+  g.lineTo(RENDERER_SIZE.width, GROUND_Y);
 };
 
 export default function DinosaurPage() {
   const [state, dispatch] = useReducer(gameReducer, gameReducerinitialState);
+  const gameLoopRef = useRef<number | null>(null);
 
   // 🎮 Game Loop
   useEffect(() => {
     function gameLoop() {
-      dispatch({ type: "TICK" });
-      requestAnimationFrame(gameLoop);
+      if (!state.isGameOver) {
+        dispatch({ type: "TICK" });
+        gameLoopRef.current = requestAnimationFrame(gameLoop);
+      }
     }
 
-    const animationFrame = requestAnimationFrame(gameLoop);
+    gameLoopRef.current = requestAnimationFrame(gameLoop);
 
-    return () => cancelAnimationFrame(animationFrame);
-  }, []);
+    return () => {
+      if (gameLoopRef.current) {
+        cancelAnimationFrame(gameLoopRef.current);
+      }
+    };
+  }, [state.isGameOver]);
 
-  useKeyboardEvent(" ", () => dispatch({ type: "JUMP" }), []);
+  useKeyboardEvent(
+    " ",
+    () => {
+      if (!state.isGameOver) {
+        dispatch({ type: "JUMP" });
+      }
+    },
+    [state.isGameOver],
+  );
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#221f22] text-[#fcfcfa]">
-      <Stage width={800} height={600} options={{ backgroundColor: "#000" }}>
+      <Stage
+        width={RENDERER_SIZE.width}
+        height={RENDERER_SIZE.height}
+        options={{ backgroundColor: "#000" }}
+      >
         <Graphics draw={drawGround} />
-        <Sprite image="./sprites/ghost.png" x={100} y={state.y} />
+        <Sprite
+          image="./sprites/ghost.png"
+          x={PLAYER_X}
+          y={state.y}
+          width={PLAYER_WIDTH}
+          height={PLAYER_HEIGHT}
+        />
         {state.obstacles.map((obs, index) => (
           <Graphics
             key={index}

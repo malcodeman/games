@@ -6,14 +6,29 @@ import {
   OBSTACLE_MIN_GAP,
   OBSTACLE_SPAWN_PROBABILITY,
   OBSTACLE_SPEED,
+  PLAYER_HEIGHT,
+  PLAYER_WIDTH,
+  PLAYER_X,
+  RENDERER_SIZE,
 } from "./constants";
-import { GameState, GameAction } from "./types";
+import { GameState, GameAction, Obstacle } from "./types";
+
+function isColliding(playerY: number, obstacles: Obstacle[]) {
+  return obstacles.some(
+    (obs) =>
+      PLAYER_X < obs.x + obs.width &&
+      PLAYER_X + PLAYER_WIDTH > obs.x &&
+      playerY < obs.y + obs.height &&
+      playerY + PLAYER_HEIGHT > obs.y,
+  );
+}
 
 export const gameReducerinitialState: GameState = {
   y: FLOOR,
   velocity: 0,
   isJumping: false,
-  obstacles: [{ x: 800, y: GROUND_Y, width: 50, height: 50 }],
+  obstacles: [],
+  isGameOver: false,
 };
 
 export const gameReducer = (state: GameState, action: GameAction) => {
@@ -22,23 +37,28 @@ export const gameReducer = (state: GameState, action: GameAction) => {
       const newY = Math.min(state.y + state.velocity, FLOOR);
       const newVelocity = newY === FLOOR ? 0 : state.velocity + GRAVITY;
       const isJumping = newY !== FLOOR;
-      const newObstacles = state.obstacles
+      const obstacles = state.obstacles
         .map((obs) => ({ ...obs, x: obs.x - OBSTACLE_SPEED }))
         .filter((obs) => obs.x > -50);
 
       if (
         Math.random() < OBSTACLE_SPAWN_PROBABILITY &&
-        (newObstacles.length === 0 ||
-          newObstacles[newObstacles.length - 1].x < 800 - OBSTACLE_MIN_GAP)
+        (obstacles.length === 0 ||
+          obstacles[obstacles.length - 1].x <
+            RENDERER_SIZE.width - OBSTACLE_MIN_GAP)
       ) {
-        newObstacles.push({ x: 800, y: GROUND_Y, width: 50, height: 50 });
+        obstacles.push({ x: 800, y: GROUND_Y - 50, width: 50, height: 50 });
+      }
+
+      if (isColliding(newY, obstacles)) {
+        return { ...state, isGameOver: true };
       }
 
       return {
         ...state,
         y: newY,
         velocity: newVelocity,
-        obstacles: newObstacles,
+        obstacles,
         isJumping,
       };
     }

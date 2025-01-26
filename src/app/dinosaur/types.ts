@@ -1,4 +1,4 @@
-type Obstacle = {
+export type Obstacle = {
   x: number;
   y: number;
   width: number;
@@ -10,6 +10,7 @@ export type GameState = {
   velocity: number;
   isJumping: boolean;
   obstacles: Obstacle[];
+  isGameOver: boolean;
 };
 
 export type GameAction = { type: "TICK" } | { type: "JUMP" };
