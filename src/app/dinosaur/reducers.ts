@@ -3,6 +3,8 @@ import {
   GRAVITY,
   GROUND_Y,
   JUMP_STRENGTH,
+  OBSTACLE_MIN_GAP,
+  OBSTACLE_SPAWN_PROBABILITY,
   OBSTACLE_SPEED,
 } from "./constants";
 import { GameState, GameAction } from "./types";
@@ -24,7 +26,11 @@ export const gameReducer = (state: GameState, action: GameAction) => {
         .map((obs) => ({ ...obs, x: obs.x - OBSTACLE_SPEED }))
         .filter((obs) => obs.x > -50);
 
-      if (Math.random() < 0.02) {
+      if (
+        Math.random() < OBSTACLE_SPAWN_PROBABILITY &&
+        (newObstacles.length === 0 ||
+          newObstacles[newObstacles.length - 1].x < 800 - OBSTACLE_MIN_GAP)
+      ) {
         newObstacles.push({ x: 800, y: GROUND_Y, width: 50, height: 50 });
       }
 

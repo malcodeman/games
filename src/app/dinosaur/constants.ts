@@ -3,3 +3,5 @@ export const GRAVITY = 0.6;
 export const JUMP_STRENGTH = -12;
 export const FLOOR = 500;
 export const OBSTACLE_SPEED = 5;
+export const OBSTACLE_SPAWN_PROBABILITY = 0.01;
+export const OBSTACLE_MIN_GAP = 160;
