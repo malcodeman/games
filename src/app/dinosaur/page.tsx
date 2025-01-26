@@ -7,6 +7,7 @@ import { gameReducer, gameReducerinitialState } from "./reducers";
 import { GROUND_Y, RENDERER_SIZE } from "./constants";
 import { Player } from "./components/Player";
 import { Slime } from "./components/Slime";
+import { Scoreboard } from "./components/Scoreboard";
 
 const drawGround = (g: GraphicsType) => {
   g.clear();
@@ -62,17 +63,9 @@ export default function DinosaurPage() {
         options={{ backgroundColor: "#000" }}
         onClick={() => handleOnJump()}
       >
-        <Text
-          text={`Score: ${state.score}`}
-          x={20}
-          y={20}
-          style={
-            new TextStyle({
-              fontSize: 24,
-              fontWeight: "400",
-              fill: "#fff",
-            })
-          }
+        <Scoreboard
+          score={state.score}
+          isPlaying={state.gameState === "playing"}
         />
         <Graphics draw={drawGround} />
         <Player y={state.playerY} gameState={state.gameState} />
