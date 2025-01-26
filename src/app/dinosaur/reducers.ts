@@ -11,6 +11,7 @@ import {
   PLAYER_X,
   RENDERER_SIZE,
 } from "./constants";
+import { coinSound, hurtSound, jumpSound } from "./sounds";
 import { GameState, GameAction, Obstacle } from "./types";
 
 function isColliding(playerY: number, obstacles: Obstacle[]) {
@@ -51,7 +52,14 @@ export const gameReducer = (state: GameState, action: GameAction) => {
         obstacles.push({ x: 800, y: GROUND_Y - 50, width: 50, height: 50 });
       }
 
+      if (state.score % 20 === 0 && state.score > 0) {
+        if (!coinSound.playing()) {
+          coinSound.play();
+        }
+      }
+
       if (isColliding(newY, obstacles)) {
+        hurtSound.play();
         return { ...state, isGameOver: true };
       }
 
@@ -65,6 +73,9 @@ export const gameReducer = (state: GameState, action: GameAction) => {
     }
 
     case "JUMP":
+      if (!state.isJumping) {
+        jumpSound.play();
+      }
       return state.isJumping
         ? state
         : { ...state, velocity: JUMP_STRENGTH, isJumping: true };
