@@ -59,6 +59,7 @@ export const gameReducer = (
           y: GROUND_Y - ENEMY_HEIGHT,
           width: ENEMY_WIDTH,
           height: ENEMY_HEIGHT,
+          color: Math.random() < 0.5 ? "purple" : "green",
         });
       }
 

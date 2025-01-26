@@ -3,6 +3,7 @@ export type Enemy = {
   y: number;
   width: number;
   height: number;
+  color: "purple" | "green";
 };
 
 export type GameState = {
