@@ -25,7 +25,7 @@ function isColliding(playerY: number, obstacles: Obstacle[]) {
 }
 
 export const gameReducerinitialState: GameState = {
-  y: FLOOR,
+  playerY: FLOOR,
   velocity: 0,
   isJumping: false,
   obstacles: [],
@@ -39,9 +39,9 @@ export const gameReducer = (
 ): GameState => {
   switch (action.type) {
     case "TICK": {
-      const newY = Math.min(state.y + state.velocity, FLOOR);
-      const newVelocity = newY === FLOOR ? 0 : state.velocity + GRAVITY;
-      const isJumping = newY !== FLOOR;
+      const newPlayerY = Math.min(state.playerY + state.velocity, FLOOR);
+      const newVelocity = newPlayerY === FLOOR ? 0 : state.velocity + GRAVITY;
+      const isJumping = newPlayerY !== FLOOR;
       const obstacles = state.obstacles
         .map((obs) => ({ ...obs, x: obs.x - OBSTACLE_SPEED }))
         .filter((obs) => obs.x > -50);
@@ -61,14 +61,14 @@ export const gameReducer = (
         }
       }
 
-      if (isColliding(newY, obstacles)) {
+      if (isColliding(newPlayerY, obstacles)) {
         hurtSound.play();
         return { ...state, gameState: "over" };
       }
 
       return {
         ...state,
-        y: newY,
+        playerY: newPlayerY,
         velocity: newVelocity,
         obstacles,
         isJumping,

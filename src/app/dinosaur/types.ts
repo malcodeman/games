@@ -6,7 +6,7 @@ export type Obstacle = {
 };
 
 export type GameState = {
-  y: number;
+  playerY: number;
   velocity: number;
   isJumping: boolean;
   obstacles: Obstacle[];

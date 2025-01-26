@@ -1,16 +1,11 @@
 "use client";
 import { useEffect, useReducer, useRef } from "react";
-import { Stage, Sprite, Graphics, Text } from "@pixi/react";
+import { Stage, Graphics, Text } from "@pixi/react";
 import { Graphics as GraphicsType, TextStyle } from "pixi.js";
 import { useIntervalEffect, useKeyboardEvent } from "@react-hookz/web";
 import { gameReducer, gameReducerinitialState } from "./reducers";
-import {
-  GROUND_Y,
-  PLAYER_HEIGHT,
-  PLAYER_WIDTH,
-  PLAYER_X,
-  RENDERER_SIZE,
-} from "./constants";
+import { GROUND_Y, RENDERER_SIZE } from "./constants";
+import { Player } from "./components/Player";
 
 const drawGround = (g: GraphicsType) => {
   g.clear();
@@ -79,13 +74,7 @@ export default function DinosaurPage() {
           }
         />
         <Graphics draw={drawGround} />
-        <Sprite
-          image="./sprites/ghost.png"
-          x={PLAYER_X}
-          y={state.y}
-          width={PLAYER_WIDTH}
-          height={PLAYER_HEIGHT}
-        />
+        <Player y={state.playerY} gameState={state.gameState} />
         {state.obstacles.map((obs, index) => (
           <Graphics
             key={index}
@@ -97,6 +86,21 @@ export default function DinosaurPage() {
             }}
           />
         ))}
+        {state.gameState === "idle" ? (
+          <Text
+            text="Start Game"
+            x={RENDERER_SIZE.width / 2}
+            y={RENDERER_SIZE.height / 2}
+            style={
+              new TextStyle({
+                fontSize: 48,
+                fontWeight: "bold",
+                fill: "green",
+              })
+            }
+            anchor={0.5}
+          />
+        ) : null}
         {state.gameState === "over" ? (
           <Text
             text="Game Over"

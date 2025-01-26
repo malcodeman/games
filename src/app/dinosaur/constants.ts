@@ -6,6 +6,9 @@ export const OBSTACLE_SPEED = 5;
 export const OBSTACLE_SPAWN_PROBABILITY = 0.01;
 export const OBSTACLE_MIN_GAP = 160;
 export const PLAYER_X = 100;
-export const PLAYER_WIDTH = 32;
-export const PLAYER_HEIGHT = 32;
+
+const PLAYER_SIZE_SCALE = 1.8;
+
+export const PLAYER_WIDTH = 13 * PLAYER_SIZE_SCALE;
+export const PLAYER_HEIGHT = 18 * PLAYER_SIZE_SCALE;
 export const RENDERER_SIZE = { width: 800, height: 600 };
