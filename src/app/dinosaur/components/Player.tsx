@@ -17,28 +17,20 @@ export function Player(props: Props) {
   useEffect(() => {
     function loadTextures() {
       setIdleTextures([
-        Texture.from("/sprites/knight-idle/knight-idle-0.png"),
-        Texture.from("/sprites/knight-idle/knight-idle-1.png"),
-        Texture.from("/sprites/knight-idle/knight-idle-2.png"),
-        Texture.from("/sprites/knight-idle/knight-idle-3.png"),
+        Texture.from("/sprites/warrior-idle/warrior-idle-0.png"),
+        Texture.from("/sprites/warrior-idle/warrior-idle-1.png"),
+        Texture.from("/sprites/warrior-idle/warrior-idle-2.png"),
+        Texture.from("/sprites/warrior-idle/warrior-idle-3.png"),
       ]);
       setRunTextures([
-        Texture.from("/sprites/knight-run/knight-run-0.png"),
-        Texture.from("/sprites/knight-run/knight-run-1.png"),
-        Texture.from("/sprites/knight-run/knight-run-2.png"),
-        Texture.from("/sprites/knight-run/knight-run-3.png"),
-        Texture.from("/sprites/knight-run/knight-run-4.png"),
-        Texture.from("/sprites/knight-run/knight-run-5.png"),
-        Texture.from("/sprites/knight-run/knight-run-6.png"),
-        Texture.from("/sprites/knight-run/knight-run-7.png"),
-        Texture.from("/sprites/knight-run/knight-run-8.png"),
-        Texture.from("/sprites/knight-run/knight-run-9.png"),
-        Texture.from("/sprites/knight-run/knight-run-10.png"),
-        Texture.from("/sprites/knight-run/knight-run-11.png"),
-        Texture.from("/sprites/knight-run/knight-run-12.png"),
-        Texture.from("/sprites/knight-run/knight-run-13.png"),
-        Texture.from("/sprites/knight-run/knight-run-14.png"),
-        Texture.from("/sprites/knight-run/knight-run-15.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-0.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-1.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-2.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-3.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-4.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-5.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-6.png"),
+        Texture.from("/sprites/warrior-run/warrior-run-7.png"),
       ]);
     }
 

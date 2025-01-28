@@ -1,7 +1,6 @@
 import {
   ENEMY_HEIGHT,
   ENEMY_WIDTH,
-  FLOOR,
   GRAVITY,
   GROUND_Y,
   JUMP_STRENGTH,
@@ -11,6 +10,7 @@ import {
   PLAYER_HEIGHT,
   PLAYER_WIDTH,
   PLAYER_X,
+  PLAYER_Y,
   RENDERER_SIZE,
 } from "./constants";
 import { coinSound, hurtSound, jumpSound } from "./sounds";
@@ -27,7 +27,7 @@ function isColliding(playerY: number, enemies: Enemy[]) {
 }
 
 export const gameReducerinitialState: GameState = {
-  playerY: FLOOR,
+  playerY: PLAYER_Y,
   velocity: 0,
   isJumping: false,
   enemies: [],
@@ -41,9 +41,10 @@ export const gameReducer = (
 ): GameState => {
   switch (action.type) {
     case "TICK": {
-      const newPlayerY = Math.min(state.playerY + state.velocity, FLOOR);
-      const newVelocity = newPlayerY === FLOOR ? 0 : state.velocity + GRAVITY;
-      const isJumping = newPlayerY !== FLOOR;
+      const newPlayerY = Math.min(state.playerY + state.velocity, PLAYER_Y);
+      const newVelocity =
+        newPlayerY === PLAYER_Y ? 0 : state.velocity + GRAVITY;
+      const isJumping = newPlayerY !== PLAYER_Y;
       const enemies = state.enemies
         .map((obs) => ({ ...obs, x: obs.x - OBSTACLE_SPEED }))
         .filter((obs) => obs.x > -50);
