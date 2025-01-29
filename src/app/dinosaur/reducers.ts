@@ -33,6 +33,7 @@ export const gameReducerinitialState: GameState = {
   enemies: [],
   score: 0,
   gameState: "idle",
+  backgroundX: 0,
 };
 
 export const gameReducer = (
@@ -81,6 +82,7 @@ export const gameReducer = (
         velocity: newVelocity,
         enemies,
         isJumping,
+        backgroundX: state.backgroundX - OBSTACLE_SPEED / 2,
       };
     }
 

@@ -13,6 +13,7 @@ export type GameState = {
   enemies: Enemy[];
   score: number;
   gameState: "idle" | "playing" | "over";
+  backgroundX: number;
 };
 
 export type GameAction =

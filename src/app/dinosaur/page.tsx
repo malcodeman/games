@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useReducer, useRef } from "react";
-import { Stage, Graphics, Text } from "@pixi/react";
+import { Stage, Graphics, Text, TilingSprite } from "@pixi/react";
 import { Graphics as GraphicsType, TextStyle } from "pixi.js";
 import { useIntervalEffect, useKeyboardEvent } from "@react-hookz/web";
 import { gameReducer, gameReducerinitialState } from "./reducers";
@@ -63,6 +63,13 @@ export default function DinosaurPage() {
         options={{ backgroundColor: "#000" }}
         onClick={() => handleOnJump()}
       >
+        <TilingSprite
+          image="/sprites/forest.png"
+          width={RENDERER_SIZE.width}
+          height={339}
+          tilePosition={{ x: state.backgroundX, y: 0 }}
+          y={RENDERER_SIZE.height - 339 - 64}
+        />
         <Scoreboard
           score={state.score}
           isPlaying={state.gameState === "playing"}
