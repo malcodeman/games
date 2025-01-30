@@ -1,20 +1,13 @@
 "use client";
 import { useEffect, useReducer, useRef } from "react";
-import { Stage, Graphics, Text, TilingSprite } from "@pixi/react";
-import { Graphics as GraphicsType, TextStyle } from "pixi.js";
+import { Stage, Text, TilingSprite } from "@pixi/react";
+import { TextStyle } from "pixi.js";
 import { useIntervalEffect, useKeyboardEvent } from "@react-hookz/web";
 import { gameReducer, gameReducerinitialState } from "./reducers";
-import { GROUND_Y, RENDERER_SIZE } from "./constants";
+import { ASSET_SIZE, RENDERER_SIZE } from "./constants";
 import { Player } from "./components/Player";
 import { Boar } from "./components/Boar";
 import { Scoreboard } from "./components/Scoreboard";
-
-const drawGround = (g: GraphicsType) => {
-  g.clear();
-  g.lineStyle(1, "#ccc");
-  g.moveTo(0, GROUND_Y);
-  g.lineTo(RENDERER_SIZE.width, GROUND_Y);
-};
 
 export default function DinosaurPage() {
   const [state, dispatch] = useReducer(gameReducer, gameReducerinitialState);
@@ -66,15 +59,21 @@ export default function DinosaurPage() {
         <TilingSprite
           image="/sprites/forest.png"
           width={RENDERER_SIZE.width}
-          height={339}
+          height={ASSET_SIZE.forest.height}
           tilePosition={{ x: state.backgroundX, y: 0 }}
-          y={RENDERER_SIZE.height - 339 - 64}
+          y={RENDERER_SIZE.height - ASSET_SIZE.forest.height}
         />
         <Scoreboard
           score={state.score}
           isPlaying={state.gameState === "playing"}
         />
-        <Graphics draw={drawGround} />
+        <TilingSprite
+          image="/sprites/ground.png"
+          width={RENDERER_SIZE.width}
+          height={ASSET_SIZE.ground.height}
+          tilePosition={{ x: state.backgroundX, y: 0 }}
+          y={RENDERER_SIZE.height - ASSET_SIZE.ground.height}
+        />
         <Player y={state.playerY} gameState={state.gameState} />
         {state.enemies.map((obs, index) => (
           <Boar
