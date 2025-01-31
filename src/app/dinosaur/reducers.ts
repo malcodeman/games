@@ -58,7 +58,7 @@ export const gameReducer = (
       ) {
         enemies.push({
           x: 800,
-          y: GROUND_Y - ENEMY_HEIGHT,
+          y: GROUND_Y - ENEMY_HEIGHT + 8,
           width: ENEMY_WIDTH,
           height: ENEMY_HEIGHT,
           color: Math.random() < 0.5 ? "purple" : "green",

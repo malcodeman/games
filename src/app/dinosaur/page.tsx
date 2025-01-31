@@ -4,7 +4,7 @@ import { Stage, Text, TilingSprite } from "@pixi/react";
 import { TextStyle } from "pixi.js";
 import { useIntervalEffect, useKeyboardEvent } from "@react-hookz/web";
 import { gameReducer, gameReducerinitialState } from "./reducers";
-import { ASSET_SIZE, RENDERER_SIZE } from "./constants";
+import { ASSET_SIZE, RENDERER_SIZE, GROUND_Y } from "./constants";
 import { Player } from "./components/Player";
 import { Boar } from "./components/Boar";
 import { Scoreboard } from "./components/Scoreboard";
@@ -72,7 +72,7 @@ export default function DinosaurPage() {
           width={RENDERER_SIZE.width}
           height={ASSET_SIZE.ground.height}
           tilePosition={{ x: state.backgroundX, y: 0 }}
-          y={RENDERER_SIZE.height - ASSET_SIZE.ground.height}
+          y={GROUND_Y}
         />
         <Player y={state.playerY} gameState={state.gameState} />
         {state.enemies.map((obs, index) => (
