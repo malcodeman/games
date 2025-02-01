@@ -74,7 +74,11 @@ export default function DinosaurPage() {
           tilePosition={{ x: state.backgroundX, y: 0 }}
           y={GROUND_Y}
         />
-        <Player y={state.playerY} gameState={state.gameState} />
+        <Player
+          y={state.playerY}
+          gameState={state.gameState}
+          isJumping={state.isJumping}
+        />
         {state.enemies.map((obs, index) => (
           <Boar
             key={index}
