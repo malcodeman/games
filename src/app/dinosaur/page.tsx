@@ -8,6 +8,7 @@ import { ASSET_SIZE, RENDERER_SIZE, GROUND_Y } from "./constants";
 import { Player } from "./components/Player";
 import { Boar } from "./components/Boar";
 import { Scoreboard } from "./components/Scoreboard";
+import { Bounds } from "./types";
 
 export default function DinosaurPage() {
   const [state, dispatch] = useReducer(gameReducer, gameReducerinitialState);
@@ -46,6 +47,13 @@ export default function DinosaurPage() {
     }
   }
 
+  function handleUpdateEnemyBounds(payload: { id: string; bounds: Bounds }) {
+    dispatch({
+      type: "UPDATE_ENEMY_BOUNDS",
+      payload,
+    });
+  }
+
   useKeyboardEvent(" ", () => handleOnJump(), [state.gameState]);
 
   return (
@@ -79,13 +87,12 @@ export default function DinosaurPage() {
           gameState={state.gameState}
           isJumping={state.isJumping}
         />
-        {state.enemies.map((obs, index) => (
+        {state.enemies.map((obs) => (
           <Boar
-            key={index}
-            x={obs.x}
-            y={obs.y}
-            width={obs.width}
-            height={obs.height}
+            key={obs.id}
+            id={obs.id}
+            bounds={obs.bounds}
+            updateEnemyBounds={handleUpdateEnemyBounds}
           />
         ))}
         {state.gameState === "idle" ? (

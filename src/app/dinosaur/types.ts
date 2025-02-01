@@ -1,9 +1,13 @@
-export type Enemy = {
+export type Bounds = {
   x: number;
   y: number;
   width: number;
   height: number;
-  color: "purple" | "green";
+};
+
+export type Enemy = {
+  id: string;
+  bounds: Bounds;
 };
 
 export type GameState = {
@@ -20,4 +24,8 @@ export type GameAction =
   | { type: "TICK" }
   | { type: "JUMP" }
   | { type: "INCREMENT_SCORE" }
-  | { type: "RESTART_GAME" };
+  | { type: "RESTART_GAME" }
+  | {
+      type: "UPDATE_ENEMY_BOUNDS";
+      payload: { id: string; bounds: Bounds };
+    };

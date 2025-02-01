@@ -1,6 +1,7 @@
+import { nanoid } from "nanoid";
 import {
-  ENEMY_HEIGHT,
-  ENEMY_WIDTH,
+  INITIAL_ENEMY_HEIGHT,
+  INITIAL_ENEMY_WIDTH,
   GRAVITY,
   GROUND_Y,
   JUMP_STRENGTH,
@@ -19,10 +20,10 @@ import { GameState, GameAction, Enemy } from "./types";
 function isColliding(playerY: number, enemies: Enemy[]) {
   return enemies.some(
     (obs) =>
-      PLAYER_X < obs.x + obs.width &&
-      PLAYER_X + PLAYER_WIDTH > obs.x &&
-      playerY < obs.y + obs.height &&
-      playerY + PLAYER_HEIGHT > obs.y,
+      PLAYER_X < obs.bounds.x + obs.bounds.width &&
+      PLAYER_X + PLAYER_WIDTH > obs.bounds.x &&
+      playerY < obs.bounds.y + obs.bounds.height &&
+      playerY + PLAYER_HEIGHT > obs.bounds.y,
   );
 }
 
@@ -47,21 +48,26 @@ export const gameReducer = (
         newPlayerY === PLAYER_Y ? 0 : state.velocity + GRAVITY;
       const isJumping = newPlayerY !== PLAYER_Y;
       const enemies = state.enemies
-        .map((obs) => ({ ...obs, x: obs.x - OBSTACLE_SPEED }))
-        .filter((obs) => obs.x > -50);
+        .map((obs) => ({
+          ...obs,
+          bounds: { ...obs.bounds, x: obs.bounds.x - OBSTACLE_SPEED },
+        }))
+        .filter((obs) => obs.bounds.x > -50);
 
       if (
         Math.random() < OBSTACLE_SPAWN_PROBABILITY &&
         (enemies.length === 0 ||
-          enemies[enemies.length - 1].x <
+          enemies[enemies.length - 1].bounds.x <
             RENDERER_SIZE.width - OBSTACLE_MIN_GAP)
       ) {
         enemies.push({
-          x: 800,
-          y: GROUND_Y - ENEMY_HEIGHT + 8,
-          width: ENEMY_WIDTH,
-          height: ENEMY_HEIGHT,
-          color: Math.random() < 0.5 ? "purple" : "green",
+          id: nanoid(),
+          bounds: {
+            x: 800,
+            y: GROUND_Y - INITIAL_ENEMY_HEIGHT,
+            width: INITIAL_ENEMY_WIDTH,
+            height: INITIAL_ENEMY_HEIGHT,
+          },
         });
       }
 
@@ -99,6 +105,16 @@ export const gameReducer = (
 
     case "RESTART_GAME":
       return { ...state, ...gameReducerinitialState, gameState: "playing" };
+
+    case "UPDATE_ENEMY_BOUNDS": {
+      const enemies = state.enemies.map((obs) =>
+        obs.id === action.payload.id
+          ? { ...obs, bounds: action.payload.bounds }
+          : obs,
+      );
+
+      return { ...state, enemies };
+    }
 
     default:
       return state;

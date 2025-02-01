@@ -1,16 +1,17 @@
 import { AnimatedSprite as AnimatedSpriteType, Texture } from "pixi.js";
 import { useEffect, useRef, useState } from "react";
-import { AnimatedSprite } from "@pixi/react";
+import { AnimatedSprite, useTick } from "@pixi/react";
+import { Bounds } from "../types";
+import { ENEMY_SCALE } from "../constants";
 
 type Props = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+  id: string;
+  bounds: Bounds;
+  updateEnemyBounds(payload: { id: string; bounds: Bounds }): void;
 };
 
 export function Boar(props: Props) {
-  const { x, y, width, height } = props;
+  const { id, bounds, updateEnemyBounds } = props;
   const spriteRef = useRef<null | AnimatedSpriteType>(null);
   const [idleTextures, setIdleTextures] = useState<Texture[]>([]);
 
@@ -29,6 +30,15 @@ export function Boar(props: Props) {
     loadTextures();
   }, []);
 
+  useTick(() => {
+    if (spriteRef.current) {
+      const bounds = spriteRef.current.getBounds();
+      const payload = { id, bounds };
+
+      updateEnemyBounds(payload);
+    }
+  });
+
   if (!idleTextures.length) {
     return null;
   }
@@ -40,10 +50,11 @@ export function Boar(props: Props) {
       isPlaying={true}
       animationSpeed={0.1}
       initialFrame={0}
-      x={x}
-      y={y}
-      width={width}
-      height={height}
+      x={bounds.x}
+      y={bounds.y}
+      width={bounds.width}
+      height={bounds.height}
+      scale={ENEMY_SCALE}
     />
   );
 }

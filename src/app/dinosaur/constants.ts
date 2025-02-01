@@ -17,7 +17,6 @@ export const PLAYER_WIDTH = 13 * PLAYER_SIZE_SCALE;
 export const PLAYER_HEIGHT = 18 * PLAYER_SIZE_SCALE;
 export const PLAYER_Y = GROUND_Y - PLAYER_HEIGHT + 8;
 
-const ENEMY_SIZE_SCALE = 2.8;
-
-export const ENEMY_WIDTH = 14 * ENEMY_SIZE_SCALE;
-export const ENEMY_HEIGHT = 15 * ENEMY_SIZE_SCALE;
+export const ENEMY_SCALE = 1.4;
+export const INITIAL_ENEMY_WIDTH = 39;
+export const INITIAL_ENEMY_HEIGHT = 29;
