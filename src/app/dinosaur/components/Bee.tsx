@@ -10,20 +10,18 @@ type Props = {
   updateEnemyBounds(payload: { id: string; bounds: Bounds }): void;
 };
 
-export function Boar(props: Props) {
+export function Bee(props: Props) {
   const { id, bounds, updateEnemyBounds } = props;
   const spriteRef = useRef<null | AnimatedSpriteType>(null);
-  const [runTextures, setRunTextures] = useState<Texture[]>([]);
+  const [flyTextures, setFlyTextures] = useState<Texture[]>([]);
 
   useEffect(() => {
     function loadTextures() {
-      setRunTextures([
-        Texture.from("/sprites/boar-run/boar-run-0.png"),
-        Texture.from("/sprites/boar-run/boar-run-1.png"),
-        Texture.from("/sprites/boar-run/boar-run-2.png"),
-        Texture.from("/sprites/boar-run/boar-run-3.png"),
-        Texture.from("/sprites/boar-run/boar-run-4.png"),
-        Texture.from("/sprites/boar-run/boar-run-5.png"),
+      setFlyTextures([
+        Texture.from("/sprites/bee-fly/bee-fly-0.png"),
+        Texture.from("/sprites/bee-fly/bee-fly-1.png"),
+        Texture.from("/sprites/bee-fly/bee-fly-2.png"),
+        Texture.from("/sprites/bee-fly/bee-fly-3.png"),
       ]);
     }
 
@@ -39,16 +37,16 @@ export function Boar(props: Props) {
     }
   });
 
-  if (!runTextures.length) {
+  if (!flyTextures.length) {
     return null;
   }
 
   return (
     <AnimatedSprite
       ref={spriteRef}
-      textures={runTextures}
+      textures={flyTextures}
       isPlaying={true}
-      animationSpeed={0.1}
+      animationSpeed={0.2}
       initialFrame={0}
       x={bounds.x}
       y={bounds.y}

@@ -8,7 +8,8 @@ import { ASSET_SIZE, RENDERER_SIZE, GROUND_Y } from "./constants";
 import { Player } from "./components/Player";
 import { Boar } from "./components/Boar";
 import { Scoreboard } from "./components/Scoreboard";
-import { Bounds } from "./types";
+import { Bounds, Enemy } from "./types";
+import { Bee } from "./components/Bee";
 
 export default function DinosaurPage() {
   const [state, dispatch] = useReducer(gameReducer, gameReducerinitialState);
@@ -54,6 +55,27 @@ export default function DinosaurPage() {
     });
   }
 
+  function renderEnemy(enemy: Enemy) {
+    if (enemy.type === "boar") {
+      return (
+        <Boar
+          key={enemy.id}
+          id={enemy.id}
+          bounds={enemy.bounds}
+          updateEnemyBounds={handleUpdateEnemyBounds}
+        />
+      );
+    }
+    return (
+      <Bee
+        key={enemy.id}
+        id={enemy.id}
+        bounds={enemy.bounds}
+        updateEnemyBounds={handleUpdateEnemyBounds}
+      />
+    );
+  }
+
   useKeyboardEvent(" ", () => handleOnJump(), [state.gameState]);
 
   return (
@@ -87,14 +109,7 @@ export default function DinosaurPage() {
           gameState={state.gameState}
           isJumping={state.isJumping}
         />
-        {state.enemies.map((obs) => (
-          <Boar
-            key={obs.id}
-            id={obs.id}
-            bounds={obs.bounds}
-            updateEnemyBounds={handleUpdateEnemyBounds}
-          />
-        ))}
+        {state.enemies.map((enemy) => renderEnemy(enemy))}
         {state.gameState === "idle" ? (
           <Text
             text="Start Game"

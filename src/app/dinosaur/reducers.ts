@@ -68,6 +68,7 @@ export const gameReducer = (
             width: INITIAL_ENEMY_WIDTH,
             height: INITIAL_ENEMY_HEIGHT,
           },
+          type: Math.random() < 0.2 ? "bee" : "boar",
         });
       }
 

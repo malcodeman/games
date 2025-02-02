@@ -8,6 +8,7 @@ export type Bounds = {
 export type Enemy = {
   id: string;
   bounds: Bounds;
+  type: "boar" | "bee";
 };
 
 export type GameState = {
