@@ -11,10 +11,12 @@ type Props = {
 
 export function Player(props: Props) {
   const { y, gameState, isJumping } = props;
+  const loop = gameState === "playing" || gameState === "idle" ? true : false;
   const spriteRef = useRef<null | AnimatedSpriteType>(null);
   const [idleTextures, setIdleTextures] = useState<Texture[]>([]);
   const [runTextures, setRunTextures] = useState<Texture[]>([]);
   const [jumpTextures, setJumpTextures] = useState<Texture[]>([]);
+  const [deadTextures, setDeadTextures] = useState<Texture[]>([]);
 
   useEffect(() => {
     function loadTextures() {
@@ -51,6 +53,16 @@ export function Player(props: Props) {
         Texture.from("/sprites/warrior-jump/warrior-jump-13.png"),
         Texture.from("/sprites/warrior-jump/warrior-jump-14.png"),
       ]);
+      setDeadTextures([
+        Texture.from("/sprites/warrior-dead/warrior-dead-0.png"),
+        Texture.from("/sprites/warrior-dead/warrior-dead-1.png"),
+        Texture.from("/sprites/warrior-dead/warrior-dead-2.png"),
+        Texture.from("/sprites/warrior-dead/warrior-dead-3.png"),
+        Texture.from("/sprites/warrior-dead/warrior-dead-4.png"),
+        Texture.from("/sprites/warrior-dead/warrior-dead-5.png"),
+        Texture.from("/sprites/warrior-dead/warrior-dead-6.png"),
+        Texture.from("/sprites/warrior-dead/warrior-dead-7.png"),
+      ]);
     }
 
     loadTextures();
@@ -62,11 +74,19 @@ export function Player(props: Props) {
     }
   }, [gameState, isJumping]);
 
-  if (!idleTextures.length || !runTextures.length) {
+  if (
+    !idleTextures.length ||
+    !runTextures.length ||
+    !jumpTextures.length ||
+    !deadTextures.length
+  ) {
     return null;
   }
 
   function renderTextures() {
+    if (gameState === "over") {
+      return deadTextures;
+    }
     if (isJumping) {
       return jumpTextures;
     }
@@ -80,6 +100,7 @@ export function Player(props: Props) {
       isPlaying={true}
       animationSpeed={0.1}
       initialFrame={0}
+      loop={loop}
       x={PLAYER_X}
       y={y}
       scale={1.2}
