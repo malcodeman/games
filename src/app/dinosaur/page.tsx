@@ -108,10 +108,7 @@ export default function DinosaurPage() {
           tilePosition={{ x: state.backgroundX, y: 0 }}
           y={RENDERER_SIZE.height - ASSET_SIZE.forest.height}
         />
-        <Scoreboard
-          score={state.score}
-          isPlaying={state.gameState === "playing"}
-        />
+        <Scoreboard score={state.score} />
         <TilingSprite
           image="/sprites/ground.png"
           width={RENDERER_SIZE.width}

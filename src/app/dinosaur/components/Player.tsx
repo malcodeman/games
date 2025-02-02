@@ -12,6 +12,7 @@ type Props = {
 export function Player(props: Props) {
   const { y, gameState, isJumping } = props;
   const loop = gameState === "playing" || gameState === "idle" ? true : false;
+  const animationSpeed = gameState === "playing" ? 0.2 : 0.1;
   const spriteRef = useRef<null | AnimatedSpriteType>(null);
   const [idleTextures, setIdleTextures] = useState<Texture[]>([]);
   const [runTextures, setRunTextures] = useState<Texture[]>([]);
@@ -98,7 +99,7 @@ export function Player(props: Props) {
       ref={spriteRef}
       textures={renderTextures()}
       isPlaying={true}
-      animationSpeed={0.1}
+      animationSpeed={animationSpeed}
       initialFrame={0}
       loop={loop}
       x={PLAYER_X}
