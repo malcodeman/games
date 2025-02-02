@@ -1,7 +1,6 @@
 import { nanoid } from "nanoid";
 import {
-  INITIAL_ENEMY_HEIGHT,
-  INITIAL_ENEMY_WIDTH,
+  ENEMY_SIZE,
   GRAVITY,
   GROUND_Y,
   JUMP_STRENGTH,
@@ -25,6 +24,29 @@ function isColliding(playerY: number, enemies: Enemy[]) {
       playerY < obs.bounds.y + obs.bounds.height &&
       playerY + PLAYER_HEIGHT > obs.bounds.y,
   );
+}
+
+function getRandomEnemyType(): Enemy["type"] {
+  const randomValue = Math.random();
+
+  if (randomValue < 0.7) {
+    return "boar"; // 70% chance
+  }
+  if (randomValue < 0.9) {
+    return "bee"; // 20% chance
+  }
+  return "boar-warrior"; // 10% chance
+}
+
+function getEnemySize(type: Enemy["type"]) {
+  switch (type) {
+    case "boar":
+      return ENEMY_SIZE.boar;
+    case "boar-warrior":
+      return ENEMY_SIZE.boarWarrior;
+    case "bee":
+      return ENEMY_SIZE.bee;
+  }
 }
 
 export const gameReducerinitialState: GameState = {
@@ -60,15 +82,18 @@ export const gameReducer = (
           enemies[enemies.length - 1].bounds.x <
             RENDERER_SIZE.width - OBSTACLE_MIN_GAP)
       ) {
+        const enemyType = getRandomEnemyType();
+        const enemySize = getEnemySize(enemyType);
+
         enemies.push({
           id: nanoid(),
           bounds: {
             x: 800,
-            y: GROUND_Y - INITIAL_ENEMY_HEIGHT,
-            width: INITIAL_ENEMY_WIDTH,
-            height: INITIAL_ENEMY_HEIGHT,
+            y: GROUND_Y - enemySize.height + 8,
+            width: enemySize.width,
+            height: enemySize.height,
           },
-          type: Math.random() < 0.2 ? "bee" : "boar",
+          type: enemyType,
         });
       }
 

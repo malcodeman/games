@@ -11,20 +11,22 @@ type Props = {
   updateEnemyBounds(payload: { id: string; bounds: Bounds }): void;
 };
 
-export function Boar(props: Props) {
+export function BoarWarrior(props: Props) {
   const { id, bounds, isDebugging = false, updateEnemyBounds } = props;
   const spriteRef = useRef<null | AnimatedSpriteType>(null);
-  const [runTextures, setRunTextures] = useState<Texture[]>([]);
+  const [walkTextures, setWalkTextures] = useState<Texture[]>([]);
 
   useEffect(() => {
     function loadTextures() {
-      setRunTextures([
-        Texture.from("/sprites/boar-run/boar-run-0.png"),
-        Texture.from("/sprites/boar-run/boar-run-1.png"),
-        Texture.from("/sprites/boar-run/boar-run-2.png"),
-        Texture.from("/sprites/boar-run/boar-run-3.png"),
-        Texture.from("/sprites/boar-run/boar-run-4.png"),
-        Texture.from("/sprites/boar-run/boar-run-5.png"),
+      setWalkTextures([
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-0.png"),
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-1.png"),
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-2.png"),
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-3.png"),
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-4.png"),
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-5.png"),
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-6.png"),
+        Texture.from("/sprites/boar-warrior-walk/boar-warrior-walk-7.png"),
       ]);
     }
 
@@ -40,7 +42,7 @@ export function Boar(props: Props) {
     }
   });
 
-  if (!runTextures.length) {
+  if (!walkTextures.length) {
     return null;
   }
 
@@ -58,7 +60,7 @@ export function Boar(props: Props) {
       ) : null}
       <AnimatedSprite
         ref={spriteRef}
-        textures={runTextures}
+        textures={walkTextures}
         isPlaying={true}
         animationSpeed={0.1}
         initialFrame={0}
@@ -66,7 +68,7 @@ export function Boar(props: Props) {
         y={bounds.y}
         width={bounds.width}
         height={bounds.height}
-        scale={ENEMY_SCALE.boar}
+        scale={ENEMY_SCALE.boarWarrior}
       />
     </>
   );

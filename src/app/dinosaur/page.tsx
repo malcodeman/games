@@ -10,10 +10,12 @@ import { Boar } from "./components/Boar";
 import { Scoreboard } from "./components/Scoreboard";
 import { Bounds, Enemy } from "./types";
 import { Bee } from "./components/Bee";
+import { BoarWarrior } from "./components/BoarWarrior";
 
 export default function DinosaurPage() {
   const [state, dispatch] = useReducer(gameReducer, gameReducerinitialState);
   const gameLoopRef = useRef<number | null>(null);
+  const isDebugging = false;
 
   // 🎮 Game Loop
   useEffect(() => {
@@ -62,6 +64,18 @@ export default function DinosaurPage() {
           key={enemy.id}
           id={enemy.id}
           bounds={enemy.bounds}
+          isDebugging={isDebugging}
+          updateEnemyBounds={handleUpdateEnemyBounds}
+        />
+      );
+    }
+    if (enemy.type === "boar-warrior") {
+      return (
+        <BoarWarrior
+          key={enemy.id}
+          id={enemy.id}
+          bounds={enemy.bounds}
+          isDebugging={isDebugging}
           updateEnemyBounds={handleUpdateEnemyBounds}
         />
       );
@@ -71,6 +85,7 @@ export default function DinosaurPage() {
         key={enemy.id}
         id={enemy.id}
         bounds={enemy.bounds}
+        isDebugging={isDebugging}
         updateEnemyBounds={handleUpdateEnemyBounds}
       />
     );

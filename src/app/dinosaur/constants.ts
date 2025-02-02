@@ -16,7 +16,22 @@ export const PLAYER_X = 100;
 export const PLAYER_WIDTH = 13 * PLAYER_SIZE_SCALE;
 export const PLAYER_HEIGHT = 18 * PLAYER_SIZE_SCALE;
 export const PLAYER_Y = GROUND_Y - PLAYER_HEIGHT + 8;
-
-export const ENEMY_SCALE = 1.4;
-export const INITIAL_ENEMY_WIDTH = 39;
-export const INITIAL_ENEMY_HEIGHT = 29;
+export const ENEMY_SCALE = {
+  boar: 1.4,
+  boarWarrior: 0.8,
+  bee: 1.2,
+};
+export const ENEMY_SIZE = {
+  boar: {
+    width: 39 * ENEMY_SCALE.boar,
+    height: 29 * ENEMY_SCALE.boar,
+  },
+  boarWarrior: {
+    width: 79 * ENEMY_SCALE.boarWarrior,
+    height: 62 * ENEMY_SCALE.boarWarrior,
+  },
+  bee: {
+    width: 36 * ENEMY_SCALE.bee,
+    height: 40 * ENEMY_SCALE.bee,
+  },
+};
