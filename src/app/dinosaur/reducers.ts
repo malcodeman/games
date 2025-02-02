@@ -13,7 +13,7 @@ import {
   PLAYER_Y,
   RENDERER_SIZE,
 } from "./constants";
-import { coinSound, hurtSound, jumpSound } from "./sounds";
+import { coinSound, deathSound, hurtSound, jumpSound } from "./sounds";
 import { GameState, GameAction, Enemy } from "./types";
 
 function isColliding(playerY: number, enemies: Enemy[]) {
@@ -105,6 +105,7 @@ export const gameReducer = (
 
       if (isColliding(newPlayerY, enemies)) {
         hurtSound.play();
+        deathSound.play();
         return { ...state, gameState: "over" };
       }
 

@@ -11,6 +11,7 @@ import { Scoreboard } from "./components/Scoreboard";
 import { Bounds, Enemy } from "./types";
 import { Bee } from "./components/Bee";
 import { BoarWarrior } from "./components/BoarWarrior";
+import { actionMusic, deathSound } from "./sounds";
 
 export default function DinosaurPage() {
   const [state, dispatch] = useReducer(gameReducer, gameReducerinitialState);
@@ -33,6 +34,15 @@ export default function DinosaurPage() {
         cancelAnimationFrame(gameLoopRef.current);
       }
     };
+  }, [state.gameState]);
+
+  useEffect(() => {
+    if (state.gameState === "playing") {
+      actionMusic.play();
+      deathSound.stop();
+    } else {
+      actionMusic.stop();
+    }
   }, [state.gameState]);
 
   useIntervalEffect(
